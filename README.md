@@ -1,33 +1,35 @@
-This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
+# Invoice Downloader extension.
 
-## Getting Started
+## What does it do
 
-First, run the development server:
+It allows to download the Invoices right from the invoice list page.
 
-```bash
-pnpm dev
-# or
-npm run dev
-```
+To use it:
+1. Visit [Invoices list page](https://keenethics.itfin.io/invoices)
+2. Select **Invoice downloader** extension from the top-right extensions menu.
+3. Click **Read page content** to load all invoices from the page.
+4. Select checkboxes near every invoice you want to download.
+5. click **Download**.
+6. (optional) Click **Go back** to repeat the steps (3-5) if needed.
 
-Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
+## How to run it
+#### To run the dev version:
+1. Run
+    ```bash
+    pnpm dev
+    # or
+    npm run dev
+    ```
+2. Open Chrome browser and load local extension from `build/chrome-mv3-dev`.
+3. Open (or refresh) invoice list page.
 
-You can start editing the popup by modifying `popup.tsx`. It should auto-update as you make changes. To add an options page, simply add a `options.tsx` file to the root of the project, with a react component default exported. Likewise to add a content page, add a `content.ts` file to the root of the project, importing some module and do some logic, then reload the extension on your browser.
-
-For further guidance, [visit our Documentation](https://docs.plasmo.com/)
-
-## Making production build
-
-Run the following:
-
-```bash
-pnpm build
-# or
-npm run build
-```
-
-This should create a production bundle for your extension, ready to be zipped and published to the stores.
-
-## Submit to the webstores
-
-The easiest way to deploy your Plasmo extension is to use the built-in [bpp](https://bpp.browser.market) GitHub action. Prior to using this action however, make sure to build your extension and upload the first version to the store to establish the basic credentials. Then, simply follow [this setup instruction](https://docs.plasmo.com/framework/workflows/submit) and you should be on your way for automated submission!
+#### To run production version:
+1. Disable dev version from [Extensions page](`chrome://extensions/`).
+2. Run
+    ```bash
+    pnpm build
+    # or
+    npm run build
+    ```
+3. Open Chrome browser and load local extension from `build/chrome-mv3-prod`.
+4. Open (or refresh) invoice list page.
