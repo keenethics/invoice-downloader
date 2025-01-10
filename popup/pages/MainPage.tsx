@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
-import Browser from 'webextension-polyfill';
 import messagingActions from "~messaging/constants";
-import { sendMessage } from "~messaging/sendMessage";
+import { sendMessage } from "~messaging/tabs/sendMessage";
 import type { InvoiceLink } from '~types';
 
 import Layout from '~popup/layout/Layout';
@@ -28,7 +27,7 @@ export default function MainPage() {
 
     if (stage === 'initial') {
       setStage('loading');
-      const tabs = await Browser.tabs.query({ active: true, currentWindow: true })
+      const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
       const resp = await sendMessage(tabs[0].id, messagingActions.GET_LINKS, {}) as InvoiceLink[];
       console.log('links', resp);
       setLinks(resp);
@@ -37,7 +36,7 @@ export default function MainPage() {
 
     if (stage === 'readyToDownload') {
       selection.forEach((link: InvoiceLink) => {
-        Browser.downloads.download({ url: link.url });
+        chrome.downloads.download({ url: link.url });
       });
       setSelection([]);
       setStage('done');

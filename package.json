@@ -7,9 +7,17 @@
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
-    "package": "plasmo package"
+    "package": "plasmo package",
+    "preinstall": "npx only-allow pnpm"
+  },
+  "engineStrict": true,
+  "engines": {
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm",
+    "pnpm": ">= 9.5.0"
   },
   "dependencies": {
+    "jszip": "^3.10.1",
     "plasmo": "0.89.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -33,6 +41,7 @@
       "downloads",
       "activeTab",
       "scripting",
+      "storage",
       "tabs"
     ]
   }

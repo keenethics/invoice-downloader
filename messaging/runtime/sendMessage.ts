@@ -1,8 +1,6 @@
-import Browser from 'webextension-polyfill';
-
-export const sendMessage = async (id: number, key: string, event: any) => {
+export const sendMessage = async (key: string, event: any) => {
   try {
-    return Browser.tabs.sendMessage(id, { key, event })
+    return chrome.runtime.sendMessage({ key, event });
   } catch (error) {
     if (
       !(error instanceof Error) ||

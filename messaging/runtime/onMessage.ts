@@ -1,8 +1,6 @@
-import Browser from 'webextension-polyfill';
-
 export const onMessage = (key: string, callback: any) => {
   try {
-    Browser.runtime.onMessage.addListener((event: any, _sender: any, sendResponse) => {
+    chrome.runtime.onMessage.addListener((event: any, _sender: any, sendResponse) => {
       if (event.key === key) {
         return callback(event, sendResponse);
       } else {
