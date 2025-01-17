@@ -48,7 +48,9 @@ or, download all invoices separately:
 v0.0.3:
 - Removed checkboxes from the webpage. So there is only **Download All** button.
 - Added progress label update while downloading invoices through UI.
+
 v0.0.2:
 - Added Download button and checkboxes for on-page selection and bulk download (as a .zip archive)
+
 v0.0.1:
 - Initial release
