@@ -1,14 +1,16 @@
+import type { PlasmoCSConfig } from 'plasmo/dist/type';
+
 import type { InvoiceLink } from '~types';
 import messagingActions from "~messaging/constants";
+import { sendMessage } from '~messaging/csui';
 
-export function getTableLinks(checkedOnly: boolean): InvoiceLink[] {
+export const config: PlasmoCSConfig = {
+  matches: ['$PLASMO_PUBLIC_INVOICE_PAGE'],
+};
+
+export function getTableLinks(): InvoiceLink[] {
   const links = [];
   document.querySelectorAll('table tbody tr').forEach(row => {
-    const checkbox = row.children[5]?.children[0] as HTMLInputElement;
-    if (checkedOnly) {
-      if (!checkbox.checked) { return; } else { checkbox.checked = false; }
-    }
-
     const detailsLink = row.children[1].children[0].textContent;
 
     // Text in a format xxx.x.xx-invoice-name
@@ -42,10 +44,9 @@ export function getTableLinks(checkedOnly: boolean): InvoiceLink[] {
   return links;
 }
 
-export default function downloadSelected() {
+export default function downloadAll(): number {
   // Filter selectedRows
-  const links = getTableLinks(true);
-
-  const event = new CustomEvent(messagingActions.CSUI_TO_BACKGROUND, { detail: links });
-  window.dispatchEvent(event);
+  const links = getTableLinks();
+  sendMessage(messagingActions.DOWNLOAD_ALL, links);
+  return links.length;
 }

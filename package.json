@@ -1,7 +1,7 @@
 {
   "name": "invoice-downloader",
   "displayName": "Invoice downloader",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A basic Crome extension to download invoices.",
   "author": "Maksym Romanchuk",
   "scripts": {

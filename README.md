@@ -6,8 +6,7 @@ It allows to download the Invoices right from the invoice list page.
 
 To use it:
 1. Visit [Invoices list page](https://keenethics.itfin.io/invoices)
-2. Select invoices via checkboxes under **Download** button.
-3. Click **Download** and wait a few seconds.
+3. Click **Download All** and wait a few seconds.
 
 or, download all invoices separately:
 
@@ -46,6 +45,9 @@ or, download all invoices separately:
 
 
 #### Changelog
+v0.0.3:
+- Removed checkboxes from the webpage. So there is only **Download All** button.
+- Added progress label update while downloading invoices through UI.
 v0.0.2:
 - Added Download button and checkboxes for on-page selection and bulk download (as a .zip archive)
 v0.0.1:

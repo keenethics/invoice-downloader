@@ -1,11 +1,14 @@
-import type { PlasmoCSConfig, PlasmoCSUIJSXContainer, PlasmoCSUIProps, PlasmoRender } from "plasmo"
-import { useEffect, type FC } from "react"
+import type { PlasmoCSConfig, PlasmoCSUIJSXContainer, PlasmoCSUIProps, PlasmoRender } from "plasmo";
+import { useEffect, useState, type FC } from "react";
 import { createRoot } from "react-dom/client";
-import downloadSelected from "./downloadSelected";
-import addCheckboxes from "./addCheckboxes";
+
+import messagingActions from "~messaging/constants";
+import { onMessage } from "~messaging/csui";
+
+import downloadAll from "./downloadAll";
 
 export const config: PlasmoCSConfig = {
-  matches: ["https://keenethics.itfin.io/invoices?*"],
+  matches: ['$PLASMO_PUBLIC_INVOICE_PAGE'],
   world: 'MAIN',
 }
 
@@ -16,11 +19,11 @@ export const getRootContainer = () =>
       if (rootContainerParent) {
         clearInterval(checkInterval);
         // Add Download button container
-        const rootContainer = document.createElement("th");
-        rootContainerParent.insertBefore(rootContainer, rootContainerParent.lastChild);
+        const rootContainer = rootContainerParent.children[5] as HTMLElement;
+        rootContainer.innerText = '';
 
         // Change "Sum" column alignment
-        const sumColumn = document.querySelector('table thead tr th:nth-child(5)');
+        const sumColumn = rootContainerParent.children[4];
         sumColumn.classList.remove('text-end');
         sumColumn.classList.add('text-center');
 
@@ -30,19 +33,52 @@ export const getRootContainer = () =>
   });
 
 const DownloadButton: FC<PlasmoCSUIProps> = () => {
-  useEffect(() => {
-    const rows = document.querySelectorAll('table tbody tr');
-    addCheckboxes(rows);
-  }, []);
+  const buttonLabels = {
+    DOWNLOAD: 'Download All',
+    LOADING: (count: number, linkCount) => `Loading (${count}/${linkCount})`,
+  }
+
+  const [buttonLabel, setButtonLabel] = useState(buttonLabels.DOWNLOAD);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [linkCount, setLinkCount] = useState(0);
 
   const handleClick = () => {
-    // Download selected invoices
-    downloadSelected();
+    // Disable button
+    setIsDisabled(true);
+    
+    // Download all invoices
+    const length = downloadAll();
+    setLinkCount(length);
+    
+    // Set progress counter
+    setButtonLabel(buttonLabels.LOADING(0, length));
   };
 
+  // Update button label progress
+  useEffect(() => {
+    const handleProgress = onMessage(messagingActions.DOWNLOAD_PROGRESS, (data) => {
+      setButtonLabel(buttonLabels.LOADING(data, linkCount));
+    })
+    window.addEventListener('message', handleProgress);
+    return () => window.removeEventListener('message', handleProgress);
+  }, [linkCount]);
+
+  // Return button status to initial after download
+  useEffect(() => {
+    const handleResponse = onMessage(messagingActions.DOWNLOAD_END, (status) => {
+      if (status === 'fail') {
+        console.warn('Download failed. Please try again.')
+      }
+      setButtonLabel(buttonLabels.DOWNLOAD);
+      setIsDisabled(false);
+    })
+    window.addEventListener('message', handleResponse);
+    return () => window.removeEventListener('message', handleResponse);
+  }, []);
+
   return (
-    <button className="btn btn-primary btn-squircle" onClick={handleClick}>
-      Download
+    <button className="btn btn-primary btn-squircle" onClick={handleClick} disabled={isDisabled}>
+      {buttonLabel}
     </button>
   )
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import messagingActions from "~messaging/constants";
-import { sendMessage } from "~messaging/tabs/sendMessage";
+import { sendMessage } from "~messaging/tabs";
 import type { InvoiceLink } from '~types';
 
 import Layout from '~popup/layout/Layout';
